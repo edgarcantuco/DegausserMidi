@@ -32,6 +32,8 @@ namespace Degausser
         public static RoutedCommand PlayPauseCommand = new RoutedCommand();
         public static RoutedCommand ExportMidiCommand = new RoutedCommand();
         public OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Jb Manager File|mgr.bin" };
+        private BBPRecord selectedSong;
+        private double tempoModifier = 1;
 
         JbManager jbManager;
 
@@ -53,6 +55,7 @@ namespace Degausser
 
             lstMediaLibrary.MouseDoubleClick += (s, e) =>
             {
+                selectedSong = (e.OriginalSource as FrameworkElement)?.DataContext as BBPRecord;
                 PlayItem((e.OriginalSource as FrameworkElement)?.DataContext as BBPRecord);
             };
 
@@ -305,9 +308,8 @@ namespace Degausser
 
         void ExportMidi(object s, RoutedEventArgs e)
         {
-            var selected = (e.OriginalSource as FrameworkElement)?.DataContext as BBPRecord;
-
-            var midiData = selected.GetMidiData();
+            var midiData = selectedSong.GetMidiData();
+            midiData.Tempo = midiData.Tempo.Select(value => (short)(value * tempoModifier)).ToArray();
 
             string currentDirectory = Directory.GetCurrentDirectory();
 
@@ -315,12 +317,16 @@ namespace Degausser
 
             Process.Start($"{currentDirectory}\\midiextractor.exe").WaitForExit();
 
-            if(!File.Exists($"{selected.Title}.mid"))
-            {
-                File.Delete($"{selected.Title}.mid");
-            }
+            File.Delete($"{currentDirectory}\\{selectedSong.Title}.mid");
 
-            File.Move("EXPORTEDUNIQUENAME.mid", $"{selected.Title}.mid");
+            File.Delete($"{currentDirectory}\\Temp.json");
+
+            File.Move("EXPORTEDUNIQUENAME.mid", $"{selectedSong.Title}.mid");
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            tempoModifier = Math.Pow(2, ((Slider)sender).Value);
         }
     }
 }

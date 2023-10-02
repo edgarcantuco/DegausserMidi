@@ -198,7 +198,7 @@ namespace Degausser
             }
 
             public MidiChannel this[int index] => Channels[index];
-            public short[] Tempo { get; }
+            public short[] Tempo { get; set; }
             public int Length => Tempo.Length;
             public List<MidiChannel> Channels { get; } = Enumerable.Range(0, MAX_CHANNELS).Select(i => new MidiChannel((byte)i)).ToList();
 
