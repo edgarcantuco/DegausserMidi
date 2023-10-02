@@ -18,6 +18,7 @@
         <CommandBinding Command="{x:Static local:MainWindow.ExportCommand}" Executed="Export" />
         <CommandBinding Command="{x:Static local:MainWindow.RefreshCommand}" Executed="Refresh" />
         <CommandBinding Command="{x:Static local:MainWindow.PlayPauseCommand}" Executed="PlayPause" />
+        <CommandBinding Command="{x:Static local:MainWindow.ExportMidiCommand}" Executed="ExportMidi"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Command="{x:Static local:MainWindow.OpenCommand}" Key="O" Modifiers="Ctrl"/>
@@ -25,6 +26,7 @@
         <KeyBinding Command="{x:Static local:MainWindow.ExportCommand}" Key="E" Modifiers="Ctrl"/>
         <KeyBinding Command="{x:Static local:MainWindow.RefreshCommand}" Key="R" Modifiers="Ctrl"/>
         <KeyBinding Command="{x:Static local:MainWindow.PlayPauseCommand}" Key="P" Modifiers="Ctrl"/>
+        <KeyBinding Command="{x:Static local:MainWindow.ExportMidiCommand}" Key="M" Modifiers="Ctrl"/>
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -33,6 +35,7 @@
             <MenuItem Header="_Export" Command="{x:Static local:MainWindow.ExportCommand}" />
             <MenuItem Header="_Refresh" Command="{x:Static local:MainWindow.RefreshCommand}" />
             <MenuItem Header="_Play/Pause" Command="{x:Static local:MainWindow.PlayPauseCommand}" />
+            <MenuItem Header="_Export MIDI" Command="{x:Static local:MainWindow.ExportMidiCommand}"/>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem DockPanel.Dock="Right" Content="Degausser v2.2a" />
@@ -80,6 +83,8 @@
                         <Slider Value="{Binding Source={StaticResource MPlayer}, Path=Position, Mode=TwoWay}" Maximum="{Binding Source={StaticResource MPlayer}, Path=Length, Mode=OneWay}" LargeChange="48" SmallChange="12" Grid.Column="1" Grid.Row="0" IsSnapToTickEnabled="False" />
                         <TextBlock Text="Volume:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" Padding="3"/>
                         <Slider Grid.Column="1" Grid.Row="1" Value="{Binding Source={StaticResource MPlayer}, Path=Volume, Mode=TwoWay}" Maximum="65535" LargeChange="1000" SmallChange="100" />
+                        <TextBlock Text="Tempo:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" Padding="3"/>
+                        <Slider Grid.Column="1" Grid.Row="2" Value="{Binding Source={StaticResource MPlayer}, Path=Tempo, Mode=TwoWay}" Maximum="65535" LargeChange="1000" SmallChange="100"/>
                     </Grid>
                     <ListBox Margin="3" Name="lstInstruments" DockPanel.Dock="Top" ItemsSource="{Binding Source={StaticResource MPlayer}, Path=Channels}">
                         <ListBox.ItemTemplate>

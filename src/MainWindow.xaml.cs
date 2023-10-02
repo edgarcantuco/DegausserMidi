@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.IO;
 using System.Globalization;
 using Microsoft.Win32;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Degausser
 {
@@ -28,6 +30,7 @@ namespace Degausser
         public static RoutedCommand ExportCommand = new RoutedCommand();
         public static RoutedCommand RefreshCommand = new RoutedCommand();
         public static RoutedCommand PlayPauseCommand = new RoutedCommand();
+        public static RoutedCommand ExportMidiCommand = new RoutedCommand();
         public OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Jb Manager File|mgr.bin" };
 
         JbManager jbManager;
@@ -92,6 +95,7 @@ namespace Degausser
             karaokeEffect.PositionCount = 0;
             karaokeViewer.ScrollToTop();
             karaokeBlock.Text = karaoke.Lyrics;
+
             MidiPlayer.Instance.Play(record.GetMidiData());
         }
 
@@ -297,6 +301,26 @@ namespace Degausser
 
             SaveAndReopen();
             Logging.Log($"Deleted {count} of {lstSaveEditor.SelectedItems.Count} records");
+        }
+
+        void ExportMidi(object s, RoutedEventArgs e)
+        {
+            var selected = (e.OriginalSource as FrameworkElement)?.DataContext as BBPRecord;
+
+            var midiData = selected.GetMidiData();
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+            File.WriteAllText($"{currentDirectory}\\Temp.json", JsonConvert.SerializeObject(midiData, Formatting.Indented));
+
+            Process.Start($"{currentDirectory}\\midiextractor.exe").WaitForExit();
+
+            if(!File.Exists($"{selected.Title}.mid"))
+            {
+                File.Delete($"{selected.Title}.mid");
+            }
+
+            File.Move("EXPORTEDUNIQUENAME.mid", $"{selected.Title}.mid");
         }
     }
 }

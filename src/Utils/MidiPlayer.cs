@@ -23,7 +23,7 @@ namespace Degausser
         const int MAX_CHANNELS = 10;
         const int MAX_TICKS = 7200;
 
-        enum MessageType
+        public enum MessageType
         {
             StopAllNotes = 0x7B,
             NoteOff = 0x80,
@@ -46,9 +46,9 @@ namespace Degausser
             public virtual byte[] Notes { get; protected set; }
         }
 
-        struct MidiMessage
+        public struct MidiMessage
         {
-            int message;
+            public int message;
 
             public MidiMessage(MessageType msgType, byte channel, byte note, byte volume)
             {
@@ -58,13 +58,23 @@ namespace Degausser
             public void Execute() => midiOutShortMsg(MidiOut, message);
         }
 
+        public class NoteData
+        {
+            public byte channel;
+            public byte note;
+            public byte volume;
+            public int position;
+            public int state;
+        }
+
         public class MidiChannel
         {
             byte lastNote;
             Chord lastChord;
             MidiMessage[,] message = new MidiMessage[MAX_TICKS, 12];
+            public List<NoteData> Notes = new List<NoteData>();
             int[] msgCount = new int[MAX_TICKS];
-            byte channel;
+            public byte channel;
             bool isActive = true;
 
             public MidiChannel(byte channel)
@@ -82,12 +92,28 @@ namespace Degausser
                 if (note == 0) return;
                 lastNote = note;
                 AddMessage(position, new MidiMessage(MessageType.NoteOn, channel, note, volume));
+                Notes.Add(new NoteData
+                {
+                    channel = channel,
+                    note = note,
+                    volume = volume,
+                    position = position,
+                    state = 1
+                });
             }
 
             void ReleaseNote(int position, byte note)
             {
                 if (note == 0) return;
                 AddMessage(position, new MidiMessage(MessageType.NoteOff, channel, note, 0));
+                Notes.Add(new NoteData
+                {
+                    channel = channel,
+                    note = note,
+                    volume = 0,
+                    position = position,
+                    state = 0
+                });
             }
 
             public void ReleaseNote(int position)
@@ -118,6 +144,14 @@ namespace Degausser
             {
                 if (drum == 0) return;
                 AddMessage(position, new MidiMessage(MessageType.NoteOn, 9, drum, volume));
+                Notes.Add(new NoteData
+                {
+                    channel = 9,
+                    note = drum,
+                    volume = volume,
+                    position = position,
+                    state = 2
+                });
             }
 
             public void ExecuteMessages(int position)
