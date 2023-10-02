@@ -199,6 +199,7 @@ namespace Degausser
 
             public MidiChannel this[int index] => Channels[index];
             public short[] Tempo { get; }
+            public int Length => Tempo.Length;
             public List<MidiChannel> Channels { get; } = Enumerable.Range(0, MAX_CHANNELS).Select(i => new MidiChannel((byte)i)).ToList();
 
         }
@@ -270,9 +271,11 @@ namespace Degausser
             while (thread != null && thread.IsAlive) ;
             this.midiData = midiData;
             Position = 0;
+            TempoModifier = 0;
             Play();
             NotifyPropertyChanged(nameof(Length));
             NotifyPropertyChanged(nameof(Channels));
+            NotifyPropertyChanged(nameof(TempoModifier));
         }
 
         public void Play()
@@ -303,7 +306,8 @@ namespace Degausser
                 long currentTick = DateTime.Now.Ticks;
                 if (currentTick >= nextTick)
                 {
-                    nextTick = currentTick + TimeSpan.TicksPerMinute / (long)(midiData.Tempo[position] * 12);
+                    double actualTempoModifier = Math.Pow(2, TempoModifier);
+                    nextTick = currentTick + TimeSpan.TicksPerMinute / (long)(midiData.Tempo[position] * 12 * actualTempoModifier);
                     foreach (var c in midiData.Channels)
                     {
                         if (c.IsActive)
