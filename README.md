@@ -9,14 +9,12 @@ In the future we might use this space to discuss some of the file formats, but o
 
 # Build python extractor
 
-To build the python extractor, run the next commands on src.
+To build the python extractor, run the next commands line by line on src.
 
-```
-cd venv\Main\Scripts
+`cd venv\Main\Scripts`
 
-activate
+`activate`
 
-cd ..\..\..
+`cd ..\..\..`
 
-pyinstaller midiextractor\midiextractor.py --dist bin/Debug --onefile --paths=.\venv\Main\Lib\site-packages --hidden-import=midiutil
-```
+`pyinstaller midiextractor\midiextractor.py --dist bin/Debug --onefile --paths=.\venv\Main\Lib\site-packages --hidden-import=midiutil`
