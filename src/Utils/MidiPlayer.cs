@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -198,7 +199,7 @@ namespace Degausser
             }
 
             public MidiChannel this[int index] => Channels[index];
-            public short[] Tempo { get; set; }
+            public short[] Tempo { get; set;}
             public int Length => Tempo.Length;
             public List<MidiChannel> Channels { get; } = Enumerable.Range(0, MAX_CHANNELS).Select(i => new MidiChannel((byte)i)).ToList();
 
@@ -307,6 +308,8 @@ namespace Degausser
                 if (currentTick >= nextTick)
                 {
                     double actualTempoModifier = Math.Pow(2, TempoModifier);
+                    //Console.WriteLine("actual " + actualTempoModifier + " modifier " + TempoModifier + " TempoPos " + midiData.Tempo[position]);
+                    //Actual tempo goes from 0.5 to 2
                     nextTick = currentTick + TimeSpan.TicksPerMinute / (long)(midiData.Tempo[position] * 12 * actualTempoModifier);
                     foreach (var c in midiData.Channels)
                     {

@@ -16,6 +16,7 @@ using System.Globalization;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace Degausser
 {
@@ -309,7 +310,8 @@ namespace Degausser
         void ExportMidi(object s, RoutedEventArgs e)
         {
             var midiData = selectedSong.GetMidiData();
-            midiData.Tempo = midiData.Tempo.Select(value => (short)(value * tempoModifier)).ToArray();
+
+            midiData.Tempo = midiData.Tempo.Select(value => (short)(value)).ToArray();//Shouldn't use tempoModifier because song can become infitecimally small or large. Needs conversion to bmp
 
             string currentDirectory = Directory.GetCurrentDirectory();
 
@@ -326,7 +328,9 @@ namespace Degausser
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            tempoModifier = Math.Pow(2, ((Slider)sender).Value);
+            tempoModifier = Math.Pow(2, ((Slider)sender).Value); //0.5 to 2
+            Console.WriteLine(tempoModifier);
+
         }
     }
 }

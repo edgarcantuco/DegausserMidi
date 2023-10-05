@@ -6,8 +6,7 @@ Folder = os.getcwd()
 with open(f"{Folder}\\Temp.json", "r") as f:
     midiExport = json.loads(f.read())
 
-Tempo = midiExport["Tempo"][0] * 10
-# Tempo = 2200
+Tempo = midiExport["Tempo"][0] * 10 * 1.19620253165#Tempo measured in BPM, and then multiplied. The third number comes from the ratio of the expected length for a few songs.
 MyMIDI = midiutil.MIDIFile(1)
 MyMIDI.addTempo(0, 0, Tempo)
 
@@ -39,7 +38,6 @@ for chnl in midiExport["Channels"]:
             duration = chnl["Notes"][note + offset]["position"] - position
         else:
             duration = 1
-
         MyMIDI.addNote(track, channel, pitch, position, duration, volume)
 
 
