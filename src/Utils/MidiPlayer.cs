@@ -242,6 +242,8 @@ namespace Degausser
 
         public bool IsPlaying { get; set; }
 
+        public bool IsLooping { get; set; }
+
         public void SilentAll()
         {
             foreach (var ch in midiData.Channels)
@@ -291,6 +293,11 @@ namespace Degausser
             thread.Start();
         }
 
+        public void Loop()
+        {
+            if (IsLooping) return;
+            IsLooping = true;
+        }
         public List<MidiChannel> Channels => midiData.Channels;
 
         // The main loop that runs the MIDI playback
@@ -302,8 +309,13 @@ namespace Degausser
             }
 
             long nextTick = 0;
+
             while (IsPlaying && position < Length)
             {
+                if (IsPlaying && position == Length-1 && IsLooping == true)
+                {
+                    position = 0;
+                }
                 long currentTick = DateTime.Now.Ticks;
                 if (currentTick >= nextTick)
                 {

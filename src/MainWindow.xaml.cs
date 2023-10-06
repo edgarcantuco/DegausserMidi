@@ -31,6 +31,7 @@ namespace Degausser
         public static RoutedCommand ExportCommand = new RoutedCommand();
         public static RoutedCommand RefreshCommand = new RoutedCommand();
         public static RoutedCommand PlayPauseCommand = new RoutedCommand();
+        public static RoutedCommand LoopCommand = new RoutedCommand();
         public static RoutedCommand ExportMidiCommand = new RoutedCommand();
         public OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Jb Manager File|mgr.bin" };
         private BBPRecord selectedSong;
@@ -277,6 +278,17 @@ namespace Degausser
             else
             {
                 MidiPlayer.Instance.Play();
+            }
+        }
+        void Loop(object s, RoutedEventArgs e)
+        {
+            if (MidiPlayer.Instance.IsLooping)
+            {
+                MidiPlayer.Instance.IsLooping = false;
+            }
+            else
+            {
+                MidiPlayer.Instance.Loop();
             }
         }
 

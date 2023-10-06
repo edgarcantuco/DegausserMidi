@@ -18,6 +18,7 @@
         <CommandBinding Command="{x:Static local:MainWindow.ExportCommand}" Executed="Export" />
         <CommandBinding Command="{x:Static local:MainWindow.RefreshCommand}" Executed="Refresh" />
         <CommandBinding Command="{x:Static local:MainWindow.PlayPauseCommand}" Executed="PlayPause" />
+        <CommandBinding Command="{x:Static local:MainWindow.LoopCommand}" Executed="Loop" />
         <CommandBinding Command="{x:Static local:MainWindow.ExportMidiCommand}" Executed="ExportMidi"/>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -26,6 +27,7 @@
         <KeyBinding Command="{x:Static local:MainWindow.ExportCommand}" Key="E" Modifiers="Ctrl"/>
         <KeyBinding Command="{x:Static local:MainWindow.RefreshCommand}" Key="R" Modifiers="Ctrl"/>
         <KeyBinding Command="{x:Static local:MainWindow.PlayPauseCommand}" Key="P" Modifiers="Ctrl"/>
+        <KeyBinding Command="{x:Static local:MainWindow.LoopCommand}" Key="L" Modifiers="Ctrl"/>
         <KeyBinding Command="{x:Static local:MainWindow.ExportMidiCommand}" Key="M" Modifiers="Ctrl"/>
     </Window.InputBindings>
     <DockPanel>
@@ -35,10 +37,11 @@
             <MenuItem Header="_Export" Command="{x:Static local:MainWindow.ExportCommand}" />
             <MenuItem Header="_Refresh" Command="{x:Static local:MainWindow.RefreshCommand}" />
             <MenuItem Header="_Play/Pause" Command="{x:Static local:MainWindow.PlayPauseCommand}" />
+            <MenuItem Header="_Loop" Command="{x:Static local:MainWindow.LoopCommand}" />
             <MenuItem Header="_Export MIDI" Command="{x:Static local:MainWindow.ExportMidiCommand}"/>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem DockPanel.Dock="Right" Content="Degausser v2.2a" />
+            <StatusBarItem DockPanel.Dock="Right" Content="Degausser v2.2.0m" />
             <StatusBarItem>
                 <TextBlock>
                     <TextBlock.Text>

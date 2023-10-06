@@ -139,12 +139,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BMI.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Icon1.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\DI.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
