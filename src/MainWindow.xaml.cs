@@ -329,7 +329,6 @@ namespace Degausser
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             tempoModifier = Math.Pow(2, ((Slider)sender).Value); //0.5 to 2
-            Console.WriteLine(tempoModifier);
 
         }
     }
